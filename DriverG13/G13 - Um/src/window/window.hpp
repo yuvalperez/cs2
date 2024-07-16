@@ -1,0 +1,60 @@
+#pragma once
+#include <d3d11.h>
+
+#include "../../ext/ImGui 1.90/imgui.h"
+#include "../../ext/ImGui 1.90/imgui_impl_dx11.h"
+#include "../../ext/ImGui 1.90/imgui_impl_win32.h"
+#include "../core/cheat.h"
+#include <dwmapi.h>
+#include <stdio.h>
+#include <d3d11.h>
+#include <d3d11.h>
+#include <wincodec.h>
+#include <DirectXTK/WICTextureLoader.h>
+#include <comdef.h>
+class Overlay {
+public:
+	// functions for the d3d11 device
+	static bool CreateDevice();
+	static void DestroyDevice();
+
+	// functions for the window
+	static void CreateOverlay();
+	static void DestroyOverlay();
+
+	// functions for ImGui
+	static bool CreateImGui();
+	static void DestroyImGui();
+
+	// for use inside of your main loop to render.
+	static void StartRender();
+	static void EndRender();
+
+	// i'm using this for the menu specifically, but you could render ESP and shit like that in here if you wanted to.
+	// as long as you're calling ImGui::GetBackgroundDrawList() between Start and End render you're fine to do what you want :)
+	static void Render();
+
+	// winapi window requirements
+	static HWND overlay;
+	static WNDCLASSEX wc;
+
+	// small helper functions for the SetForeground function
+	static bool IsWindowInForeground(HWND window) { return GetForegroundWindow() == window; }
+	static bool BringToForeground(HWND window) { return SetForegroundWindow(window); }
+
+	// sets the window to the foreground
+	static void SetForeground(HWND window);
+
+	static ID3D11Device* device;
+	static ID3D11DeviceContext* device_context;
+	static IDXGISwapChain* swap_chain;
+	static ID3D11RenderTargetView* render_targetview;
+
+	// if we should render menu on top of the overlay.
+	inline static bool RenderMenu;
+	inline static bool shouldRun;
+
+
+};
+
+inline Overlay overlay;
